@@ -1,58 +1,78 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import moment from 'moment';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
+class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.startInterval = this.startInterval.bind(this);
+    this.stopInterval = this.stopInterval.bind(this);
+  }
+
+  componentDidMount() {
+
+  }
+
+  startInterval() {
+    this.interval = setInterval(() => {
+      if (this.props.seconds === 0) {
+        this.props.start();
+        this.props.subMinute();
+      } else {
+        this.props.start();
+      }
+    }, 1000)
+  }
+
+  stopInterval() {
+    console.log(this.interval);
+    this.props.stop();
+    clearInterval(this.interval);
+  }
+
+  fixZero(value) {
+    if (value.toString().length === 1) {
+      return '0' + value;
+    }
+
+    return value;
+  }
+
+  render() {
+    console.log('TIME', this.props.time);
+
+    return (
+        <div>
+
+          <h1>Time: {`${this.fixZero(this.props.minutes)}:${this.fixZero(this.props.seconds)}`}</h1>
+          <h1>Minutes: {this.props.minutes}</h1>
+          <h1>Seconds: {this.props.seconds}</h1>
+          <hr/>
+          <div>
+
+            <button onClick={this.startInterval}>Start</button>
+            <button onClick={this.stopInterval}>Stop</button>
+          </div>
+        </div>
+    );
+  }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    counter: state.counter,
+    minutes: state.minutes,
+    seconds: state.seconds
+  }
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    start: () => dispatch({type: 'START'}),
+    subMinute: () => dispatch({type: 'SUB_MINUTE'}),
+    stop: () => dispatch({type: 'STOP'}),
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
