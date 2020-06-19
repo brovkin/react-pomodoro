@@ -1,0 +1,8 @@
+.timer__time-block {
+    font-size: 100px;
+    font-weight: 100;
+    text-align: center;
+    color: #fff;
+    background-color: #f56b50;
+    border-radius: 5px;
+}

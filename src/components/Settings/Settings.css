@@ -1,0 +1,9 @@
+.settings__time-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.settings__btn-group {
+
+}
