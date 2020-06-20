@@ -1,6 +1,4 @@
-#React-Pomodoro
-
-:tomato:
+# React-Pomodoro :tomato:
 
 Ваш интервальный таймер для максимальной концентрации.
 
