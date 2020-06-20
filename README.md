@@ -1,4 +1,6 @@
-#React-Pomodoro :tomato:
+#React-Pomodoro
+
+:tomato:
 
 Ваш интервальный таймер для максимальной концентрации.
 
@@ -7,17 +9,17 @@
 
 Стек: React/Redux/Bootstrap
 
-## Установка пакетов
+### Установка пакетов
 
-### `npm install`
+`npm install`
 
-## Создать build
+### Создать build
 
-### `npm run build`
+`npm run build`
 
-## Запуск
+### Запуск
 
-### `npm run start`
+`npm run start`
 
 ## Приложение
 [React-Pomodoro :tomato:](http://react-pomodoro.brozabro.ru/) 
@@ -25,7 +27,7 @@
 ## Контакты 🦜
 
 - Почта: brovkin.on@gmail.com 
-- Telegram: @brovkin_artem
+- Telegram: https://t.me/brovkin_artem
 - Cайт-портфолио: https://brozabro.ru
 
 
