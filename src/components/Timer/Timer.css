@@ -6,3 +6,7 @@
     background-color: #f56b50;
     border-radius: 5px;
 }
+
+.timer__time-title {
+    padding: 10px;
+}

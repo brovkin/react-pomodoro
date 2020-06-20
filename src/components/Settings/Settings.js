@@ -3,10 +3,6 @@ import { connect } from 'react-redux';
 import './Settings.css';
 
 class Settings extends Component {
-    constructor(props) {
-        super(props);
-
-    }
 
     isDisabledWorkMinus = (value) => value <= 1;
     isDisabledWorkPlus = (value) => value === 30;
@@ -14,16 +10,18 @@ class Settings extends Component {
     isDisabledRestMinus = (value) => !value;
     isDisabledRestPlus = (value) => value === 10;
 
+    disabledClass = (settingsStatus) => settingsStatus ? 'disabled' : '';
+
     render() {
         return(
-            <div className="col-8">
+            <div className="settings__wrapper col-12">
                 <div className="settings__title-block">
                     <h1>Настройки:</h1>
                 </div>
 
                 <div className="settings__time-block">
                     <b>Время рабочей сессии:</b>
-                    <div className="settings__btn-group btn-group-md">
+                    <div className={"settings__btn-group btn-group-md " + (this.disabledClass(this.props.saveSettings))}>
                         <button
                             className="btn btn-lg btn-success"
                             disabled={this.isDisabledWorkMinus(this.props.workMinutes)}
@@ -42,7 +40,7 @@ class Settings extends Component {
 
                 <div className="settings__time-block">
                     <b>Время перерыва между рабочими сессиями:</b>
-                    <div className="settings__btn-group btn-group-md">
+                    <div className={"settings__btn-group btn-group-md " + (this.disabledClass(this.props.saveSettings))}>
                         <button
                             className="btn btn-lg btn-success"
                             disabled={this.isDisabledRestMinus(this.props.restMinutes)}

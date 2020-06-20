@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Timer from './components/Timer/Timer';
 import Settings from "./components/Settings/Settings";
+import Tomato from './components/Tomato/Tomato';
 import { connect } from 'react-redux';
 import './App.css';
 
@@ -11,6 +12,7 @@ class App extends Component {
     this.startInterval = this.startInterval.bind(this);
     this.stopInterval = this.stopInterval.bind(this);
     this.startTimer = this.startTimer.bind(this);
+    this.startRest = this.startRest.bind(this);
     this.pauseTimer = this.pauseTimer.bind(this);
     this.continueTimer = this.continueTimer.bind(this);
   }
@@ -28,42 +30,76 @@ class App extends Component {
 
   continueTimer() {
     this.props.continue();
-    this.startInterval();
+    if (this.props.isRest) {
+      this.startRest();
+    } else {
+      this.startInterval();
+    }
+
   }
 
   pauseTimer() {
     clearInterval(this.interval);
-    console.log('PAUSE', this.props.settings);
-    this.props.pause(this.props.settings);
+    this.props.pause({settings: this.props.settings, status: this.props.isRest});
   }
 
   startInterval() {
     this.interval = setInterval(() => {
+
       if (this.props.seconds === 0) {
-        this.props.start();
-        this.props.subMinute();
+
+        if (this.props.workMinutes === 0) {
+          this.props.changeRest();
+          clearInterval(this.interval);
+          this.props.addTomato();
+          this.startRest();
+        } else {
+          this.props.start();
+          this.props.subMinute();
+        }
       } else {
         this.props.start();
       }
+
+    }, 1000)
+  }
+
+  startRest() {
+    this.interval = setInterval(() => {
+      if (this.props.seconds === 0) {
+
+        if (this.props.restMinutes === 0) {
+          this.props.changeWork();
+          clearInterval(this.interval);
+          alert(`Цикл завершен. Ваши томаты: ${this.props.tomato}`)
+          // this.startInterval();
+        } else {
+          this.props.start();
+          this.props.subMinuteRest();
+        }
+      } else {
+        this.props.start();
+      }
+
     }, 1000)
   }
 
   stopInterval() {
-    console.log(this.interval);
     this.props.stop();
     clearInterval(this.interval);
   }
 
   render() {
-    console.log('APP', this.props);
 
     return (
         <div className="app__wrapper col-md-6">
-          <h1 className="app__title">Pomodoro</h1>
+          <h1 className="app__title">Pomodoro
+            <Tomato tomato={this.props.tomato}/>
+          </h1>
           <Timer/>
           <Settings/>
           <hr/>
-          <div className="col-md-3 d-flex justify-content-between">
+          <div className="col-md-12 d-flex justify-content-between">
             {this.props.isWork
                 ? <button className="btn btn-lg btn-warning" onClick={this.pauseTimer}>Пауза</button>
                 : this.props.saveSettings
@@ -71,7 +107,7 @@ class App extends Component {
                     : <button className="btn btn-lg btn-primary" onClick={this.startTimer}>Старт</button>
             }
 
-            <button className="btn btn-lg btn-outline-danger" onClick={this.stopInterval}>Стоп</button>
+            <button className="btn btn-lg btn-outline-danger" onClick={this.stopInterval}>Сброс</button>
           </div>
         </div>
     );
@@ -85,20 +121,26 @@ const mapStateToProps = state => {
     restMinutes: state.restMinutes,
     isWork: state.isWork,
     isPause: state.isPause,
+    isRest: state.isRest,
     saveSettings: state.saveSettings,
     settings: state.settings,
-    seconds: state.seconds
+    seconds: state.seconds,
+    tomato: state.tomato
   }
 };
 
-const mapDispatchToProps = (dispatch, props) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     start: () => dispatch({type: 'START'}),
     subMinute: () => dispatch({type: 'SUB_MINUTE'}),
+    subMinuteRest: () => dispatch({type: 'SUB_MINUTE_REST'}),
     stop: () => dispatch({type: 'STOP'}),
     pause: (settings) => dispatch({type: 'PAUSE', payload: settings}),
     continue: () => dispatch({type: 'CONTINUE'}),
-    save: (value) => dispatch({type: 'SAVE_SETTINGS', payload: value})
+    save: (value) => dispatch({type: 'SAVE_SETTINGS', payload: value}),
+    changeRest: () => dispatch({type: 'CHANGE_REST'}),
+    changeWork: () => dispatch({type: 'CHANGE_WORK'}),
+    addTomato: () => dispatch({type: 'ADD_TOMATO'})
   }
 };
 

@@ -1,9 +1,27 @@
+.settings__wrapper {
+    margin: 1rem auto;
+}
+
+.settings__minutes {
+    font-weight: 700;
+    margin: 0 1rem;
+}
+
 .settings__time-block {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 1rem;
 }
 
 .settings__btn-group {
+    width: 150px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
+.settings__btn-group.disabled {
+    pointer-events: none;
+    opacity: 0.7;
 }

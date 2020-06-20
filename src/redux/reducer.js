@@ -6,6 +6,7 @@ const initialState = {
         rest: 0,
     },
     seconds: 0,
+    tomato: 0,
     isWork: false,
     isPause: false,
     isRest: false,
@@ -16,7 +17,6 @@ const reducer = (state = initialState, action) => {
 
     switch(action.type) {
         case 'SAVE_SETTINGS':
-            console.log(action.payload);
             return {
                 ...state,
                 isWork: true,
@@ -28,33 +28,55 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 isPause: false,
                 workMinutes: state.workMinutes,
+                restMinutes: state.restMinutes,
                 seconds: state.seconds - 1
             };
         case 'CONTINUE':
-
-            console.log('CONTINUE', state, action);
             return {
                 ...state,
+                settings: state.settings,
                 isWork: true,
                 isPause: false,
             };
 
         case 'PAUSE':
-            console.log('PAYLOAD', action.payload);
             return {
                 ...state,
-                settings: action.payload,
+                settings: action.payload.settings,
+                isRest: action.payload.status,
                 isWork: false,
                 isPause: true,
             };
         case 'STOP':
             return {
-                ...initialState
+                ...initialState,
             };
+        case 'CHANGE_REST':
+            return {
+                ...state,
+                settings: state.settings,
+                workMinutes: state.settings.work,
+                isRest: true,
+            };
+        case 'CHANGE_WORK':
+            return {
+                ...state,
+                settings: state.settings,
+                restMinutes: state.settings.rest,
+                isRest: false,
+                isWork: false,
+            };
+
         case 'SUB_MINUTE':
             return {
                 ...state,
                 workMinutes: state.workMinutes - 1,
+                seconds: 59
+            };
+        case 'SUB_MINUTE_REST':
+            return {
+                ...state,
+                restMinutes: state.restMinutes - 1,
                 seconds: 59
             };
 
@@ -79,11 +101,15 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 restMinutes: state.restMinutes - 1,
             };
+        case 'ADD_TOMATO':
+            return {
+                ...state,
+                tomato: state.tomato + 1
+            };
         default:
             return state;
 
     }
-    return state;
 }
 
 export default reducer;

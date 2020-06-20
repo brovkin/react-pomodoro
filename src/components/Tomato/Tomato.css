@@ -1,0 +1,12 @@
+.tomato__wrapper {
+    display: flex;
+    justify-content: flex-end;
+    position: absolute;
+    right: 5px;
+    bottom: -30px;
+}
+
+.tomato__item {
+    display: inline-block;
+    padding: 5px 2px;
+}
